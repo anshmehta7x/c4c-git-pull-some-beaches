@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
-
+import matplotlib.pyplot as plt
 
 model = Sequential()
 model.add(Input(shape=(40, 626, 1)))  # Input layer with specified shape
@@ -33,12 +33,15 @@ def predict(f_path):
     # 0 is fake
 
     audio, sr = librosa.load(f_path, sr=16000)
+
+    
     audio = librosa.util.fix_length(audio,size=80000)
+
     mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=40, hop_length=128)
     mfccs = np.expand_dims(mfccs, axis=0)
     predictions = model.predict(mfccs,verbose=0)
     if predictions[0] > 0.3:
-        return 1
+        return (1,'plot.png')
     else:
         return 0
 
@@ -46,6 +49,7 @@ def predict_array(wav_array, sampling_rate):
     # 1 is real
     # 0 is fake
     audio = wav_array
+
     # Resample the audio to 16000 Hz
     audio = librosa.resample(np.array(audio), orig_sr=sampling_rate, target_sr=16000)
     audio = librosa.util.fix_length(audio, size=80000)
@@ -56,3 +60,17 @@ def predict_array(wav_array, sampling_rate):
         return 1
     else:
         return 0
+
+def create_waveform(wav_array, sampling_rate):
+    audio = wav_array
+    audio = librosa.resample(np.array(audio), orig_sr=sampling_rate, target_sr=16000)
+    audio = librosa.util.fix_length(audio, size=80000)
+    mfccs = librosa.feature.mfcc(y=audio, sr=16000, n_mfcc=40, hop_length=128)
+    mfccs = np.expand_dims(mfccs, axis=0)
+    plt.figure(figsize=(10, 4))
+    librosa.display.specshow(mfccs[0], x_axis='time')
+    plt.colorbar()
+    plt.title('MFCC')
+    plt.tight_layout()
+    plt.savefig('plot.png')
+    return 'plot.png'
