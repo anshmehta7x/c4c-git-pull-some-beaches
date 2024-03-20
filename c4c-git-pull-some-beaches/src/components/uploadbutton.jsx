@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
-import axios from "axios";
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export default function UploadButton({
     type,
@@ -10,6 +11,14 @@ export default function UploadButton({
 }) {
     const fileInputRef = useRef();
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        localStorage.setItem('fake_percent', '');
+        localStorage.setItem('type', '');
+    },[])
+
 
     const showError = (message) => {
         seterrorText(message);
@@ -41,20 +50,23 @@ export default function UploadButton({
         setisDrag("");
 
         axios
-            .post("http://localhost:8000/classify", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                showError(error.message);
-            });
-    };
-
-    const handleUploadClick = () => {
+          .post('http://127.0.0.1:8000/classify', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            localStorage.setItem('fake_percent', response.data.fake_percent);
+            localStorage.setItem('type', type)
+            navigate('/output')
+          })
+          .catch((error) => {
+            
+            showError(error.message);
+          });
+      };
+    
+      const handleUploadClick = () => {
         fileInputRef.current.click();
     };
 
