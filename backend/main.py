@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-
+import cv2
 from sqlalchemy.orm import Session
 import librosa
 from pydantic import BaseModel
-
+import numpy as np
 import crud, models, schemas, nn
 from database import SessionLocal, engine
 
@@ -66,8 +66,8 @@ def read_api_key_by_owner(owner: str, db: Session = Depends(get_db)):
    # print(audio_bytes)
    # return {"status": "success"}
 
-@app.post("/classify")
-async def classify(file: UploadFile = File(...), db: Session = Depends(get_db)):
+@app.post("/classifyaudio")
+async def classifyaudio(file: UploadFile = File(...), db: Session = Depends(get_db)):
     print("API called with audio input succesfully")
     print(file)
     try:
@@ -78,14 +78,32 @@ async def classify(file: UploadFile = File(...), db: Session = Depends(get_db)):
 
     return {'prediction':pred, 'status':'success'}
 
-@app.post("/createwaveform")
-async def createwaveform(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    print("API called with audio input succesfully")
-    print(file)
+def conv_to_arr(file: UploadFile):
     try:
-        audio_array, sample_rate = librosa.load(file.file, sr=16000)
+        image_data = np.frombuffer(file.file.read(), np.uint8)
+        image = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
+
+        # Resize the image to 224x224
+        resized_image = cv2.resize(image, (224, 224))
+
+        # Convert BGR to RGB
+        resized_image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
+
+        # Convert to numpy array
+        image_array = np.array(resized_image_rgb)
+        return image_array
+        
+    except:
+        return
+
+@app.post("/classifyimage")
+async def classifyimage(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    print("API called with image input succesfully")
+    try:
+        img_array = conv_to_arr(file)
+        print(img_array)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    img = nn.create_waveform(audio_array,sample_rate)
+    pred = nn.predict_image(img_array)
 
-    return FileResponse(img, media_type='image/png')
+    return {'prediction':pred, 'status':'success'}
