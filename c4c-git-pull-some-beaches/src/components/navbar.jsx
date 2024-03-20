@@ -33,7 +33,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row float-right mr-5 hidden md:flex">
+            <div className="flex-row float-right mr-5 hidden md:flex">
                 <div className="mx-5 cursor-pointer items-center flex text-white">
                     <Link to="/about">About</Link>
                 </div>
