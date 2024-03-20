@@ -56,8 +56,9 @@ export default function UploadButton({
             },
           })
           .then((response) => {
-            localStorage.setItem('fake_percent', response.data.fake_percent);
+            localStorage.setItem('fake_percent', response.data.prediction);
             localStorage.setItem('type', type)
+            console.log(response.data.prediction);
             navigate('/output')
           })
           .catch((error) => {
