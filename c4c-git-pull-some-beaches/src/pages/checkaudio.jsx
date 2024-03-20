@@ -1,6 +1,7 @@
 import React from "react";
 import HeroImage from "../components/heroimage";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 export default function CheckAudio() {
     const svgPaths = [

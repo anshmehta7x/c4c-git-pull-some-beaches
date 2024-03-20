@@ -5,20 +5,17 @@ export default function Footer() {
 
     return (
         <div className="flex justify-center align-middle items-center h-10 pt-10 pb-10">
-            <p className="text-white urbanist-light">
-                Made with ❤️ by
-                <span
-                    className="hoverable-text"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    {" "}
-                    git pull{" "}
-                </span>
-                {/* <span className={isHovered ? "visible-text" : "hidden-text"}>
-                    (some beaches)
-                </span> */}
-            </p>
+            <div className="md:flex flex-row items-center">
+                <div className="mx-5 cursor-pointer">
+                    <Link to="/">Check Image</Link>
+                </div>
+                <div className="mx-5 cursor-pointer">
+                    <Link to="/audio">Check Audio</Link>
+                </div>
+                <div className="mx-5 cursor-pointer">
+                    <Link to="/video">Check Video</Link>
+                </div>
+            </div>
         </div>
     );
 }
