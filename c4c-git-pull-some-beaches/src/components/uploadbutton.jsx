@@ -48,7 +48,26 @@ export default function UploadButton({
 
     const uploadFile = (formData) => {
         setisDrag("");
+        if(type==='image'){
+            axios
+        .post('http://127.0.0.1:8000/createwaveform', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          responseType: 'arraybuffer', 
+        })
+        .then((response) => {
+            const blob = new Blob([response.data], { type: 'image/png' });
+            const imageUrl = URL.createObjectURL(blob);
+           console.log(imageUrl);
 
+        })
+        .catch((error) => {
+          showError(error.message);
+        });
+        }
+        
+        
         axios
           .post('http://127.0.0.1:8000/classify', formData, {
             headers: {
