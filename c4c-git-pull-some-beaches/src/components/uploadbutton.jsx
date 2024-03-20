@@ -9,7 +9,7 @@ export default function UploadButton({ type }) {
             <br />
             <div className="text-white">
                 <p className="text-lg">or drop a file,</p>
-                <p>paste image or URL</p>
+                <p>paste {type} or URL</p>
             </div>
         </div>
     );

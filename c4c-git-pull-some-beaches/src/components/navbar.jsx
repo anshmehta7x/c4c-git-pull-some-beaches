@@ -18,13 +18,13 @@ export default function Navbar() {
                         <Link to="/audio">Check Audio</Link>
                     </div>
                     <div className="mx-5 cursor-pointer">
-                        <Link to="/video"></Link>Check Video
+                        <Link to="/video">Check Video</Link>
                     </div>
                 </div>
             </div>
             <div className="flex flex-row float-right mr-5">
                 <div className="mx-5 cursor-pointer items-center flex text-white">
-                    <Link to="/video"></Link>About
+                    <Link to="/"></Link>About
                 </div>
                 <div>
                 <button className="bg-main-purple text-white w-[25vw] md:w-[7.5vw] h-[6.5vh] rounded-3xl">

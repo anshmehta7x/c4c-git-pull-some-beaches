@@ -6,7 +6,7 @@ export default function CheckImage() {
     return (
         <main className="bg-main-bg min-h-screen w-screen">
             <Navbar />
-            <HeroImage type={image} svgToUse={"./panda.svg"} />
+            <HeroImage type={"image"} svgToUse={"./panda.svg"} />
         </main>
     );
 }
