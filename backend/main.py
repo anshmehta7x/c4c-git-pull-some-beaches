@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+
 from sqlalchemy.orm import Session
 import librosa
 from pydantic import BaseModel
@@ -73,4 +75,17 @@ async def classify(file: UploadFile = File(...), db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     pred = nn.predict_array(audio_array,sample_rate)
-    return {"status": "success", "prediction": pred}
+
+    return {'prediction':pred, 'status':'success'}
+
+@app.post("/createwaveform")
+async def createwaveform(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    print("API called with audio input succesfully")
+    print(file)
+    try:
+        audio_array, sample_rate = librosa.load(file.file, sr=16000)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    img = nn.create_waveform(audio_array,sample_rate)
+
+    return FileResponse(img, media_type='image/png')
