@@ -49,7 +49,7 @@ export default function UploadButton({
         setisDrag("");
         if (type == "audio") {
             axios
-                .post("http://127.0.0.1:8000/classifyaudio", formData, {
+                .post("https://f7c3-136-233-9-98.ngrok-free.app/classifyaudio", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -72,7 +72,7 @@ export default function UploadButton({
                 });
         } else if (type == "image") {
             axios
-                .post("http://127.0.0.1:8000/classifyimage", formData, {
+                .post("https://f7c3-136-233-9-98.ngrok-free.app/classifyimage", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -83,7 +83,6 @@ export default function UploadButton({
                         response.data.prediction
                     );
                     localStorage.setItem("type", type);
-                    localStorage.setItem("imageUrl", "");
                     console.log(response.data.prediction);
                     navigate("/output");
                 })
