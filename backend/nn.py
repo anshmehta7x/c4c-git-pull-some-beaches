@@ -1,5 +1,4 @@
 import librosa
-import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -9,50 +8,33 @@ from PIL import Image
 import cv2
 
 model = Sequential()
-model.add(Input(shape=(40, 626, 1)))  # Input layer with specified shape
-
-# Convolutional layers for feature extraction
+model.add(Input(shape=(40, 626, 1)))
 model.add(Conv2D(32, (3, 3), activation='relu', padding='same'))
-model.add(MaxPooling2D((2, 2)))  # Adding MaxPooling layer for downsampling
+model.add(MaxPooling2D((2, 2))) 
 model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
-model.add(MaxPooling2D((2, 2)))  # Adding another MaxPooling layer
+model.add(MaxPooling2D((2, 2)))  
 model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
-model.add(MaxPooling2D((2, 2)))  # Adding another MaxPooling layer
+model.add(MaxPooling2D((2, 2)))  
 
-# Flatten layer to convert 2D features to 1D
 model.add(Flatten())
-
-# Dense layers for classification
-model.add(Dense(128, activation='relu'))  # Dense layer with ReLU activation
-model.add(Dense(64, activation='relu'))   # Additional dense layer
-model.add(Dense(1, activation='sigmoid'))  # Output layer with sigmoid activation for binary classification
-
-# Load the model
+model.add(Dense(128, activation='relu'))  
+model.add(Dense(64, activation='relu'))   
+model.add(Dense(1, activation='sigmoid')) 
 model.load_weights('the_weights.h5')
 
 model2 = Sequential()
-
-# Convolutional layers
 model2.add(Conv2D(32, (3, 3), activation='relu', input_shape=(224,224,3)))
 model2.add(MaxPooling2D((2, 2)))
 model2.add(Conv2D(64, (3, 3), activation='relu'))
 model2.add(MaxPooling2D((2, 2)))
 model2.add(Conv2D(128, (3, 3), activation='relu'))
 model2.add(MaxPooling2D((2, 2)))
-
-# Flatten the output of the convolutional layers
 model2.add(Flatten())
-
-# Dense (fully-connected) layers
 model2.add(Dense(128, activation='relu'))
 model2.add(Dropout(0.5))
 model2.add(Dense(64, activation='relu'))
 model2.add(Dropout(0.5))
-
-# Output layer
 model2.add(Dense(1, activation='sigmoid'))
-
-# Compile the model
 model2.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 model2.load_weights('image_weights_final.h5')
@@ -109,16 +91,6 @@ def create_waveform(wav_array, sampling_rate):
 
 
 def error_level_analysis(image, quality_val=90):
-    """
-    Perform Error Level Analysis (ELA) on an image.
-    
-    Args:
-        image (numpy.ndarray): Input image.
-        quality_val (int): Quality value for JPEG compression (0-100).
-        
-    Returns:
-        numpy.ndarray: Error Level Analysis image.
-    """
     try:
         temp_filename = 'temp.jpg'
         _, encoded_img = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, quality_val])

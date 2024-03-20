@@ -59,13 +59,6 @@ def read_api_key_by_owner(owner: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="API Key not found")
     return db_api_key
 
-#@app.post("/predict")
-#async def predict(file: UploadFile = File(...)):
- #   print("API called with audio input succesfully")
-  #  audio_bytes = await file.read()
-   # print(audio_bytes)
-   # return {"status": "success"}
-
 @app.post("/classifyaudio")
 async def classifyaudio(file: UploadFile = File(...), db: Session = Depends(get_db)):
     print("API called with audio input succesfully")
@@ -82,14 +75,8 @@ def conv_to_arr(file: UploadFile):
     try:
         image_data = np.frombuffer(file.file.read(), np.uint8)
         image = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
-
-        # Resize the image to 224x224
         resized_image = cv2.resize(image, (224, 224))
-
-        # Convert BGR to RGB
         resized_image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
-
-        # Convert to numpy array
         image_array = np.array(resized_image_rgb)
         return image_array
         
