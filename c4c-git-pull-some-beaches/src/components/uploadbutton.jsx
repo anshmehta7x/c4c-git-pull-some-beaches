@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadButton({
@@ -11,14 +11,13 @@ export default function UploadButton({
 }) {
     const fileInputRef = useRef();
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        localStorage.setItem('fake_percent', '');
-        localStorage.setItem('type', '');
-    },[])
-
+        localStorage.setItem("fake_percent", "");
+        localStorage.setItem("type", "");
+    }, []);
 
     const showError = (message) => {
         seterrorText(message);
@@ -48,45 +47,53 @@ export default function UploadButton({
 
     const uploadFile = (formData) => {
         setisDrag("");
-        if(type==='image'){
+        if (type == "audio") {
             axios
-        .post('http://127.0.0.1:8000/createwaveform', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          responseType: 'arraybuffer', 
-        })
-        .then((response) => {
-            const blob = new Blob([response.data], { type: 'image/png' });
-            const imageUrl = URL.createObjectURL(blob);
-           console.log(imageUrl);
-
-        })
-        .catch((error) => {
-          showError(error.message);
-        });
+                .post("http://127.0.0.1:8000/classifyaudio", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    localStorage.setItem(
+                        "fake_percent",
+                        response.data.prediction
+                    );
+                    localStorage.setItem("type", type);
+                    localStorage.setItem(
+                        "imageUrl",
+                        "/audioPage/audioThree.svg"
+                    );
+                    console.log(response.data.prediction);
+                    navigate("/output");
+                })
+                .catch((error) => {
+                    showError(error.message);
+                });
+        } else if (type == "image") {
+            axios
+                .post("http://127.0.0.1:8000/classifyimage", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    localStorage.setItem(
+                        "fake_percent",
+                        response.data.prediction
+                    );
+                    localStorage.setItem("type", type);
+                    localStorage.setItem("imageUrl", "");
+                    console.log(response.data.prediction);
+                    navigate("/output");
+                })
+                .catch((error) => {
+                    showError(error.message);
+                });
         }
-        
-        
-        axios
-          .post('http://127.0.0.1:8000/classify', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
-            localStorage.setItem('fake_percent', response.data.prediction);
-            localStorage.setItem('type', type)
-            console.log(response.data.prediction);
-            navigate('/output')
-          })
-          .catch((error) => {
-            
-            showError(error.message);
-          });
-      };
-    
-      const handleUploadClick = () => {
+    };
+
+    const handleUploadClick = () => {
         fileInputRef.current.click();
     };
 
