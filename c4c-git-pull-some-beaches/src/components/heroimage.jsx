@@ -1,5 +1,6 @@
 import UploadButton from "./uploadbutton";
 import { useState } from "react";
+import "../animations.css";
 
 export default function HeroImage({ type, svgToUse }) {
     const [errorVisibility, seterrorVisibility] = useState("hidden");
@@ -9,11 +10,16 @@ export default function HeroImage({ type, svgToUse }) {
         <section className="mt-[6vh] md:mt-0 md:h-[88vh] flex justify-center align-middle items-center">
             <div className="h-auto md:h-[75%] w-[75%]">
                 <div className="h-[75%] flex flex-col md:flex-row">
-                    <div className="w-full mb-5 md:mb-0 md:w-[60%] flex align-middle justify-center">
+                    <div
+                        className={`w-full mb-5 md:mb-0 md:w-[60%] flex align-middle justify-center relative ${
+                            type === "video" ? "bg-black rounded-xl" : ""
+                        }`}
+                    >
                         <img src={svgToUse} className="h-[100%] m-0"></img>
+                        <div className="vertical-line"></div>
                     </div>
                     <div className="w-full h-[30vh] md:w-[40%] md:h-auto flex justify-center align-middle items-center md:ml-5">
-                        <div className="bg-main-grey h-[100%] w-[100%] rounded-xl flex justify-center align-middle items-center">
+                        <div className="bg-black h-[100%] w-[100%] rounded-xl flex justify-center align-middle items-center">
                             <UploadButton
                                 type={type}
                                 accept={

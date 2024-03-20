@@ -1,0 +1,21 @@
+.vertical-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px; /* Adjust thickness as needed */
+    height: 100%; /* Take full height of the parent container */
+    background-color: white; /* Color of the line */
+    animation: moveRight 4s linear infinite; /* Animation duration and timing */
+}
+
+@keyframes moveRight {
+    0% {
+        left: 0;
+    }
+    50% {
+        left: 100%; /* Move the line to the right edge */
+    }
+    100% {
+        left: 0;
+    }
+}
