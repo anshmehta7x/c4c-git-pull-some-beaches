@@ -8,7 +8,9 @@ export default {
     extend: {
       colors:{
         "new-blue": "#8758FF",
-        "bg-grey":"#646464"
+        "main-grey":"#181818",
+        "main-bg": "#000000",
+        "main-purple": "#8758FF"
       }
     },
   },
