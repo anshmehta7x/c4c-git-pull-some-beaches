@@ -4,8 +4,6 @@ export default function Navbar() {
         <nav className="h-[12vh] w-full border-b-[0.25px] border-b-[#f2f2f2] flex flex-row items-center justify-between">
             <div
                 className="float-left flex flex-row justify-center text-white cursor-pointer"
-                Link
-                to="/"
             >
                 <div className=" font-bold mx-5 text-2xl">
                     For<span className="text-main-purple font-bold">Real.</span>
